@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeCoyl</title>
+<style>
+  :root{
+    --navy:#0d2137; --navy2:#122b47; --card:#15304d; --line:#23456b;
+    --teal:#7b8cff; --teal-d:#5f6fe6; --ink:#e8eef5; --muted:#9db3c9;
+    --safe:#3fb27f; --susp:#e0a93b; --danger:#e05a5a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--navy);color:var(--ink);
+       font:16px/1.6 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  a{color:var(--teal)}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px}
+  /* hero */
+  .hero{background:radial-gradient(1200px 400px at 70% -10%,rgba(123,140,255,.12),transparent),
+        linear-gradient(120deg,#0d2137,#2a3480);padding:70px 0 60px;border-bottom:3px solid var(--teal)}
+  .tag{display:inline-block;background:var(--teal);color:#ffffff;font-weight:700;
+       font-size:12px;letter-spacing:.5px;padding:4px 12px;border-radius:20px;margin-bottom:16px}
+  .hero h1{font-size:64px;margin:4px 0 8px;letter-spacing:.5px}
+  .hero .line{height:4px;width:70px;background:var(--teal);border-radius:3px;margin:12px 0 22px}
+  .hero .pitch{font-size:26px;font-weight:600;max-width:640px;margin:0 0 6px}
+  .hero .sub{color:var(--muted);font-size:17px;max-width:620px}
+  .cta{margin-top:28px;display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-block;background:var(--teal);color:#ffffff;font-weight:700;
+       padding:13px 22px;border-radius:9px;text-decoration:none}
+  .btn:hover{background:var(--teal-d);color:#ffffff}
+  .btn.ghost{background:transparent;color:var(--teal);border:1px solid var(--teal)}
+  .btn.ghost:hover{background:rgba(123,140,255,.12);color:var(--teal)}
+  /* sections */
+  section{padding:46px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:24px;margin:0 0 6px}
+  .lead{color:var(--muted);max-width:720px;margin:0 0 24px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center}
+  .stat b{display:block;font-size:30px;color:var(--teal)}
+  .stat span{color:var(--muted);font-size:12.5px}
+  /* flow */
+  .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;position:relative}
+  .step .num{color:var(--teal);font-weight:700;font-size:13px}
+  .step h3{margin:6px 0 4px;font-size:16px}
+  .step p{margin:0;color:var(--muted);font-size:13.5px}
+  .step:not(:last-child):after{content:"→";position:absolute;right:-11px;top:50%;
+       transform:translateY(-50%);color:var(--teal);font-weight:700;z-index:1}
+  /* feature cards */
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .fcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;
+         text-decoration:none;color:var(--ink);display:block;transition:border-color .15s}
+  .fcard:hover{border-color:var(--teal)}
+  .fcard h3{margin:0 0 6px;font-size:17px}
+  .fcard h3 .arw{color:var(--teal)}
+  .fcard p{margin:0;color:var(--muted);font-size:14px}
+  .fcard .pin{display:inline-block;font-size:11px;color:var(--teal);border:1px solid var(--teal-d);
+       border-radius:20px;padding:2px 9px;margin-top:10px}
+  /* measured */
+  .measured{background:var(--navy2);border:1px solid var(--line);border-radius:12px;
+            padding:22px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .measured .m b{display:block;font-size:28px;color:var(--teal)}
+  .measured .m span{color:var(--muted);font-size:12.5px}
+  .note{color:var(--muted);font-size:13px;margin-top:14px}
+  .banner{background:rgba(224,169,59,.12);border:1px solid var(--susp);border-radius:10px;
+          padding:14px 16px;color:var(--ink);font-size:14px}
+  footer{padding:40px 0;text-align:center;color:var(--muted);font-size:13px}
+  footer .btn{margin-bottom:16px}
+  @media(max-width:760px){.hero h1{font-size:44px}.hero .pitch{font-size:21px}
+    .stats,.flow,.measured{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:1fr}
+    .step:after{display:none}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>DeCoyl</h1>
+    <div class="line"></div>
+    <p class="pitch">An AI that attacks your employees before real hackers do.</p>
+    <p class="sub">Phishing defense and awareness training for small and mid-sized
+      businesses — and the IT providers who protect them.</p>
+    <div class="cta">
+      <a class="btn" href="/console">Open the MSP console →</a>
+      <a class="btn ghost" href="/report?client=acme">See a sample report</a>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2>The problem</h2>
+    <p class="lead">Generative AI lets attackers write personalized scams in seconds, for
+      almost nothing. Small businesses have no security team to fight back — the person who
+      handles IT often also approves the invoices.</p>
+    <div class="stats">
+      <div class="stat"><b>$3.05B</b><span>US business-email-compromise losses, 2025</span></div>
+      <div class="stat"><b>$123k</b><span>average loss per BEC complaint</span></div>
+      <div class="stat"><b>54% vs 12%</b><span>click rate: AI spear-phish vs control</span></div>
+      <div class="stat"><b>~2×</b><span>attacks on small businesses, 2025</span></div>
+    </div>
+    <p class="note">Figures from published reports (FBI IC3 2025; Heiding et al.). Targets
+      shown are goals to validate, not results.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>How it works — a closed loop</h2>
+    <p class="lead">One engine protects the inbox, trains the staff, and gets sharper every
+      round. Every attack that slips past the defender becomes training data.</p>
+    <div class="flow">
+      <div class="step"><div class="num">01</div><h3>Attacker AI</h3>
+        <p>Writes realistic phishing and spear-phishing tests (synthetic, sandboxed).</p></div>
+      <div class="step"><div class="num">02</div><h3>Defender</h3>
+        <p>Four layers — language, link &amp; sender forensics, spear-phish cues, explain.</p></div>
+      <div class="step"><div class="num">03</div><h3>Misses retrain</h3>
+        <p>Attacks that evade the defender feed back in; the model retrains and improves.</p></div>
+      <div class="step"><div class="num">04</div><h3>Coach staff</h3>
+        <p>Safe simulations with instant coaching; each person gets a human-risk score.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>What's in this demo</h2>
+    <p class="lead">Every piece below is live. Click through to the working console.</p>
+    <div class="cards">
+      <a class="fcard" href="/console">
+        <h3>Multi-layer defender <span class="arw">→</span></h3>
+        <p>Scores each email through four layers and explains every flag in plain English.
+          Optional live Claude detection as an ensemble when a key is set.</p>
+        <span class="pin">in the console</span></a>
+      <a class="fcard" href="/console">
+        <h3>Self-improving loop <span class="arw">→</span></h3>
+        <p>Watch the detector learn: it climbs from ~34% to ~88% detection round by round
+          while a frozen baseline stays flat — real numbers, measured live.</p>
+        <span class="pin">in the console</span></a>
+      <a class="fcard" href="/console">
+        <h3>MSP multi-tenant console <span class="arw">→</span></h3>
+        <p>One screen for an IT provider: a portfolio of client companies, each with its own
+          inbox, risk scores and loop, fully isolated.</p>
+        <span class="pin">in the console</span></a>
+      <a class="fcard" href="/report?client=acme">
+        <h3>Compliance report <span class="arw">→</span></h3>
+        <p>A printable per-client report for auditors and cyber-insurers: attacks caught,
+          detection vs baseline, training results, risk over time.</p>
+        <span class="pin">sample report</span></a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Measured results</h2>
+    <p class="lead">The self-improving loop is a real classifier measured on a held-out test
+      set — not a staged animation.</p>
+    <div class="measured">
+      <div class="m"><b>88%</b><span>detection after retraining</span></div>
+      <div class="m"><b>~25%</b><span>frozen baseline filter</span></div>
+      <div class="m"><b>0%</b><span>false-positive rate</span></div>
+      <div class="m"><b>32</b><span>automated tests passing</span></div>
+    </div>
+    <p class="note">Runs fully offline on heuristics — no API key required. Add an Anthropic
+      key and Claude judges each email as a second opinion. All data is synthetic.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>The business</h2>
+    <p class="lead">One product does two jobs — protect and train — sold where the budget
+      already exists.</p>
+    <div class="stats">
+      <div class="stat"><b>$2–4</b><span>per employee / month (to validate)</span></div>
+      <div class="stat"><b>MSP</b><span>channel: one partner, dozens of clients</span></div>
+      <div class="stat"><b>Free</b><span>14-day phishing risk check as the hook</span></div>
+      <div class="stat"><b>Flywheel</b><span>each client's attacks improve detection for all</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="banner"><b>Note:</b> all clients and data shown here are illustrative;
+      malicious samples use lookalikes of made-up domains.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="btn" href="/console">Open the MSP console →</a>
+    <div>DeCoyl · AI phishing defense &amp; training for small businesses.</div>
+  </div>
+</footer>
+
+</body>
+</html>

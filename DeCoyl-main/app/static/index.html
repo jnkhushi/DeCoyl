@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeCoyl MSP Console</title>
+<style>
+  :root{
+    --navy:#0d2137; --navy2:#122b47; --card:#15304d; --line:#23456b;
+    --teal:#7b8cff; --teal-d:#5f6fe6; --ink:#e8eef5; --muted:#9db3c9;
+    --safe:#3fb27f; --susp:#e0a93b; --danger:#e05a5a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       background:var(--navy);color:var(--ink)}
+  header{background:linear-gradient(120deg,#0d2137,#2a3480);padding:24px 20px;
+         border-bottom:3px solid var(--teal)}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+  h1{margin:0;font-size:26px;letter-spacing:.3px}
+  .tag{display:inline-block;background:var(--teal);color:#ffffff;font-weight:700;
+       font-size:11px;padding:3px 10px;border-radius:20px;margin-bottom:8px}
+  .sub{color:var(--muted);margin:6px 0 0}
+  .mode{float:right;font-size:12px;color:var(--muted);border:1px solid var(--line);
+        padding:4px 10px;border-radius:6px;margin-top:4px}
+  section{margin:24px 0}
+  h2{font-size:17px;border-left:4px solid var(--teal);padding-left:10px;margin:0 0 14px}
+  /* portfolio */
+  .clients{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .client{background:var(--card);border:1px solid var(--line);border-radius:10px;
+          padding:14px;cursor:pointer;transition:border-color .15s}
+  .client:hover{border-color:var(--teal-d)}
+  .client.selected{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal)}
+  .cname{font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .csub{color:var(--muted);font-size:12px;margin:2px 0 10px}
+  .cmetrics{display:flex;gap:14px;font-size:13px;color:var(--ink);flex-wrap:wrap}
+  .cmetrics b{color:var(--teal)}
+  .chip{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px}
+  .band-low{background:rgba(63,178,127,.18);color:var(--safe);border:1px solid var(--safe)}
+  .band-medium{background:rgba(224,169,59,.18);color:var(--susp);border:1px solid var(--susp)}
+  .band-high{background:rgba(224,90,90,.18);color:var(--danger);border:1px solid var(--danger)}
+  .clientbar{background:var(--navy2);border:1px solid var(--line);border-radius:10px;
+             padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+  .clientbar b{font-size:17px}
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center}
+  .stat b{display:block;font-size:26px;color:var(--teal)}
+  .stat span{color:var(--muted);font-size:12px}
+  /* email */
+  .email{background:var(--card);border:1px solid var(--line);border-radius:10px;
+         padding:14px 16px;margin-bottom:10px;cursor:pointer}
+  .email .row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .email .meta{min-width:0}.email .subj{font-weight:600}
+  .email .from{color:var(--muted);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .badge{font-weight:700;font-size:12px;padding:5px 11px;border-radius:20px;white-space:nowrap}
+  .b-safe{background:rgba(63,178,127,.18);color:var(--safe);border:1px solid var(--safe)}
+  .b-suspicious{background:rgba(224,169,59,.18);color:var(--susp);border:1px solid var(--susp)}
+  .b-dangerous{background:rgba(224,90,90,.18);color:var(--danger);border:1px solid var(--danger)}
+  .detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:14px}
+  .detail.open{display:block}
+  .detail .advice{margin-top:8px;color:var(--teal)}
+  .sig{display:inline-block;background:var(--navy2);border:1px solid var(--line);
+       border-radius:6px;padding:3px 8px;font-size:12px;margin:4px 4px 0 0;color:var(--muted)}
+  /* employees */
+  .emp{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .emp .n{width:170px}.emp .n small{color:var(--muted);display:block;font-size:12px}
+  .bar{flex:1;background:var(--navy2);border-radius:6px;height:16px;overflow:hidden;border:1px solid var(--line)}
+  .bar > i{display:block;height:100%}
+  .fill-low{background:var(--safe)}.fill-medium{background:var(--susp)}.fill-high{background:var(--danger)}
+  .emp .v{width:92px;text-align:right;font-size:13px;color:var(--muted)}
+  /* panels / forms */
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+  textarea,input,select{width:100%;background:var(--navy2);border:1px solid var(--line);
+       color:var(--ink);border-radius:8px;padding:9px;font:inherit;margin-top:6px}
+  textarea{min-height:90px;resize:vertical}
+  label{font-size:13px;color:var(--muted)}
+  button{background:var(--teal);color:#ffffff;border:0;font-weight:700;padding:10px 18px;
+         border-radius:8px;cursor:pointer;margin-top:12px}
+  button:hover{background:var(--teal-d)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .result{margin-top:14px;display:none}.result.open{display:block}
+  .simbox{background:var(--navy2);border:1px dashed var(--susp);border-radius:8px;padding:14px;margin-top:12px}
+  .simbanner{color:var(--susp);font-weight:700;font-size:12px;margin-bottom:8px}
+  .flag{color:var(--danger);font-size:13px}
+  footer{color:var(--muted);font-size:12px;text-align:center;padding:30px 16px}
+  @media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}
+    .clients{grid-template-columns:1fr}.emp .n{width:130px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="mode" id="mode">detection: …</span>
+    <a href="/" style="color:var(--teal);font-size:13px;text-decoration:none">← Overview</a>
+    <h1 style="margin-top:8px">DeCoyl</h1>
+    <p class="sub">One console, every client. AI phishing defense &amp; training — demo on synthetic data.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section>
+    <h2>Client portfolio</h2>
+    <div class="clients" id="clients"></div>
+  </section>
+
+  <div class="clientbar">
+    <div><span class="sub" style="margin:0">Viewing client</span><br><b id="sel-name">—</b>
+      <span class="sub" id="sel-sub"></span></div>
+    <div style="display:flex;gap:12px;align-items:center">
+      <span class="chip" id="sel-band"></span>
+      <button style="margin-top:0" onclick="openReport()">Compliance report</button>
+    </div>
+  </div>
+
+  <section>
+    <h2>Overview</h2>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <section>
+    <h2>Self-improving loop — attacker → defender → retrain</h2>
+    <div class="panel">
+      <p class="sub" style="margin-top:0">The attacker introduces a new phishing tactic
+        each round. Misses feed back into the detector, which retrains. Measured on a fixed
+        held-out test set, versus a baseline that never learns. Each client has its own loop.</p>
+      <button onclick="runLoop()">Run the loop for this client</button>
+      <div class="result" id="loop-result"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Protected inbox — click an email to see why it was flagged</h2>
+    <div id="inbox"></div>
+  </section>
+
+  <section>
+    <h2>Human-risk by employee</h2>
+    <div class="panel" id="employees"></div>
+  </section>
+
+  <section class="grid2">
+    <div>
+      <h2>Analyze an email</h2>
+      <div class="panel">
+        <label>Subject<input id="a-subj" placeholder="Urgent wire transfer"></label>
+        <label>From name<input id="a-name" placeholder="A known colleague"></label>
+        <label>From address<input id="a-addr" placeholder="ceo@lookalike-domain.com"></label>
+        <label>Body<textarea id="a-body" placeholder="Paste the email text…"></textarea></label>
+        <button onclick="analyze()">Analyze against this client</button>
+        <div class="result" id="a-result"></div>
+      </div>
+    </div>
+    <div>
+      <h2>Run a training simulation</h2>
+      <div class="panel">
+        <p class="sub" style="margin-top:0">Generates a safe, labelled test email for one
+          employee. Nothing is sent.</p>
+        <label>Employee<select id="s-emp"></select></label>
+        <label>Difficulty
+          <select id="s-diff"><option>easy</option><option selected>medium</option><option>hard</option></select>
+        </label>
+        <button onclick="simulate()">Generate simulation</button>
+        <div class="result" id="s-result"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>All clients and data shown are illustrative. Detection is heuristic unless an
+Anthropic API key is configured.</footer>
+
+<script>
+const esc = s => (s??"").replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const api = p => fetch('/api/clients' + p).then(r=>r.json());
+let current = null;            // selected client id
+let currentEmps = [];
+
+async function load(){
+  const data = await api('');
+  document.getElementById('mode').textContent = 'detection: ' + data.detection_mode;
+  renderPortfolio(data.clients);
+  if(data.clients.length) selectClient(data.clients[0].id);
+}
+
+function renderPortfolio(list){
+  document.getElementById('clients').innerHTML = list.map(c=>`
+    <div class="client${c.id===current?' selected':''}" id="client-${c.id}" onclick="selectClient('${c.id}')">
+      <div class="cname">${esc(c.name)}<span class="chip band-${c.band}">${c.band}</span></div>
+      <div class="csub">${esc(c.sector)} · ${esc(c.domain)}</div>
+      <div class="cmetrics"><span>${c.employees} staff</span>
+        <span><b>${c.dangerous}</b> dangerous</span>
+        <span>risk <b>${c.avg_human_risk}</b></span></div>
+    </div>`).join('');
+}
+
+async function selectClient(cid){
+  current = cid;
+  document.querySelectorAll('.client').forEach(e=>e.classList.toggle('selected', e.id==='client-'+cid));
+  // reset per-client panels
+  ['loop-result','a-result','s-result'].forEach(id=>{const e=document.getElementById(id);e.classList.remove('open');e.innerHTML='';});
+  const [inbox, emps, stats] = await Promise.all([
+    api(`/${cid}/inbox`), api(`/${cid}/employees`), api(`/${cid}/stats`)]);
+  currentEmps = emps;
+  document.getElementById('sel-name').textContent = stats.name;
+  document.getElementById('sel-sub').textContent = `  ${stats.sector} · ${stats.domain}`;
+  const band = document.getElementById('sel-band');
+  band.textContent = stats.band; band.className = 'chip band-' + stats.band;
+  renderStats(stats); renderInbox(inbox); renderEmployees(emps);
+  document.getElementById('s-emp').innerHTML =
+    emps.map(e=>`<option value="${e.email}">${esc(e.name)} — ${esc(e.role)}</option>`).join('');
+}
+
+function renderStats(s){
+  const cards = [['Emails scanned', s.scanned], ['Dangerous', s.dangerous],
+    ['Suspicious', s.suspicious], ['Avg human-risk', s.avg_human_risk+'/100']];
+  document.getElementById('stats').innerHTML =
+    cards.map(([l,v])=>`<div class="stat"><b>${v}</b><span>${l}</span></div>`).join('');
+}
+
+function emailCard(e){
+  const a = e.analysis;
+  const sigs = a.signals.map(s=>`<span class="sig">${esc(s.reason)}</span>`).join('') || '<span class="sig">no signals</span>';
+  return `<div class="email" onclick="this.querySelector('.detail').classList.toggle('open')">
+    <div class="row">
+      <div class="meta"><div class="subj">${esc(e.subject)}</div>
+        <div class="from">${esc(e.from_name)} &lt;${esc(e.from_addr)}&gt;</div></div>
+      <span class="badge b-${a.verdict}">${a.verdict.toUpperCase()} · ${a.score}</span>
+    </div>
+    <div class="detail">
+      <div><b>Why:</b> ${esc(a.explanation)}</div>
+      <div class="advice"><b>What to do:</b> ${esc(a.advice)}</div>
+      ${claudeLine(a)}
+      <div style="margin-top:8px">${sigs}</div>
+    </div></div>`;
+}
+function claudeLine(a){
+  if(!a.claude) return '';
+  const v = a.claude.is_phishing ? 'phishing' : 'looks legitimate';
+  return `<div style="margin-top:8px;color:#9db3c9"><b>Claude:</b> ${v} (${a.claude.confidence}% confidence)</div>`;
+}
+function renderInbox(list){ document.getElementById('inbox').innerHTML = list.map(emailCard).join(''); }
+function openReport(){ if(current) window.open('/report?client=' + current, '_blank'); }
+
+function renderEmployees(list){
+  document.getElementById('employees').innerHTML = list.map(e=>`
+    <div class="emp">
+      <div class="n">${esc(e.name)}<small>${esc(e.role)} · ${e.tests} tests</small></div>
+      <div class="bar"><i class="fill-${e.band}" style="width:${e.human_risk}%"></i></div>
+      <div class="v">${e.human_risk}/100 ${e.band}</div>
+    </div>`).join('');
+}
+
+async function runLoop(){
+  if(!current) return;
+  const el = document.getElementById('loop-result');
+  el.classList.add('open'); el.innerHTML = '<p class="sub">Running attacker, defender and retraining…</p>';
+  const d = await api(`/${current}/loop?rounds=5`);
+  el.innerHTML = loopChart(d) + loopCaption(d);
+}
+
+function loopChart(d){
+  const c = d.curve, R = c.length - 1;
+  const x0=58, x1=600, y0=18, y1=205;
+  const px = i => x0 + (R ? i*(x1-x0)/R : 0);
+  const py = v => y1 - v/100*(y1-y0);
+  const line = key => c.map((p,i)=>`${px(i).toFixed(1)},${py(p[key]).toFixed(1)}`).join(' ');
+  const grid = [0,25,50,75,100].map(v=>`
+    <line x1="${x0}" y1="${py(v)}" x2="${x1}" y2="${py(v)}" stroke="#23456b" stroke-width="1"/>
+    <text x="${x0-8}" y="${py(v)+4}" fill="#9db3c9" font-size="11" text-anchor="end">${v}</text>`).join('');
+  const xlabels = c.map((p,i)=>`<text x="${px(i)}" y="228" fill="#9db3c9" font-size="11" text-anchor="middle">R${i}</text>`).join('');
+  const dots = c.map((p,i)=>`<circle cx="${px(i)}" cy="${py(p.learner_detection)}" r="3.5" fill="#7b8cff"/>`).join('');
+  return `<svg viewBox="0 0 620 250" style="width:100%;height:auto;margin-top:10px">
+    ${grid}
+    <polyline points="${line('baseline_detection')}" fill="none" stroke="#e0a93b" stroke-width="2" stroke-dasharray="6 4"/>
+    <polyline points="${line('learner_detection')}" fill="none" stroke="#7b8cff" stroke-width="2.5"/>
+    ${dots}${xlabels}
+    <text x="${x0}" y="12" fill="#9db3c9" font-size="11">detection rate %</text>
+    <rect x="430" y="8" width="12" height="3" fill="#7b8cff"/><text x="448" y="13" fill="#e8eef5" font-size="11">learning detector</text>
+    <rect x="430" y="22" width="12" height="3" fill="#e0a93b"/><text x="448" y="27" fill="#e8eef5" font-size="11">baseline (frozen)</text>
+  </svg>`;
+}
+
+function loopCaption(d){
+  const s = d.summary;
+  const misses = d.curve.filter(c=>c.misses!==null).map(c=>c.misses).join(', ');
+  return `<p style="margin:10px 0 0">After ${d.rounds} rounds the learning detector reached
+    <b style="color:#7b8cff">${s.learner_detection}%</b> detection vs the frozen baseline's
+    <b style="color:#e0a93b">${s.baseline_detection}%</b> — a <b>+${s.lift} point</b> lift,
+    with a <b>${s.learner_fp}%</b> false-positive rate.
+    <br><span class="sub">Phishing emails missed per round (before retraining): ${misses}.
+    Measured on a held-out test set of unseen wording across ${d.total_families} tactics.</span></p>`;
+}
+
+async function analyze(){
+  if(!current) return;
+  const body = {subject: val('a-subj'), from_name: val('a-name'), from_addr: val('a-addr'),
+    body: val('a-body'), spf:'none', dkim:'none', dmarc:'none'};
+  const a = await fetch(`/api/clients/${current}/analyze`,{method:'POST',
+    headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json());
+  const el = document.getElementById('a-result'); el.classList.add('open');
+  el.innerHTML = `<span class="badge b-${a.verdict}">${a.verdict.toUpperCase()} · ${a.score}</span>
+    <p><b>Why:</b> ${esc(a.explanation)}</p>
+    <p class="advice"><b>What to do:</b> ${esc(a.advice)}</p>${claudeLine(a)}`;
+}
+
+async function simulate(){
+  if(!current) return;
+  const a = await fetch(`/api/clients/${current}/simulate`,{method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({employee_email:val('s-emp'), difficulty:val('s-diff')})}).then(r=>r.json());
+  const el = document.getElementById('s-result'); el.classList.add('open');
+  if(a.detail){ el.innerHTML = esc(a.detail); return; }
+  el.innerHTML = `<div class="simbox">
+    <div class="simbanner">${esc(a.banner)}</div>
+    <div><b>From:</b> ${esc(a.from_name)} &lt;${esc(a.from_addr)}&gt;</div>
+    <div><b>To:</b> ${esc(a.to)}</div>
+    <div><b>Subject:</b> ${esc(a.subject)}</div>
+    <p>${esc(a.body)}</p>
+    <div><b>Red flags taught:</b></div>
+    ${a.red_flags.map(f=>`<div class="flag">• ${esc(f)}</div>`).join('')}
+  </div>`;
+}
+
+const val = id => document.getElementById(id).value;
+load();
+</script>
+</body>
+</html>
